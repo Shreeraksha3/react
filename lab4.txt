@@ -1,0 +1,153 @@
+import React, { useState } from 'react';
+import './ToDoFunction.css';
+
+const ToDoFunction = () => {
+const [taskText, setTaskText] = useState('');
+const [tasks, setTasks] = useState([]);
+
+const addTask = () => {
+    if (taskText.trim()) {
+    const newTask = {
+        id: Date.now(),
+        text: taskText,
+        completed: false,
+        };
+setTasks(prev => [...prev, newTask]);
+setTaskText('');
+}
+};
+
+const deleteTask = (id) => {
+setTasks(prev => prev.filter(task => task.id !== id));
+};
+
+const toggleTask = (id) => {
+setTasks(prev =>prev.map(task => task.id === id ? { ...task, completed: !task.completed } :task));
+};
+
+return (
+<div className="todo-container">
+<h2 className="todo-heading">To-Do List</h2>
+<div className="input-row">
+<input
+placeholder="Enter a new task..."
+value={taskText}
+onChange={(e) => setTaskText(e.target.value)}
+
+/>
+<button onClick={addTask}>Add</button>
+</div>
+
+<ul className="task-list">
+{tasks.map(({ id, text, completed }) => (
+<li
+key={id}
+className={`task-item ${completed ? 'completed' : ''}`}
+>
+<div className="task-left">
+<input
+type="checkbox"
+checked={completed}
+onChange={() => toggleTask(id)}
+/>
+<span className="task-text">{text}</span>
+</div>
+<button className="delete-button" onClick={() =>
+deleteTask(id)}>
+Delete
+
+</button>
+</li>
+))}
+</ul>
+</div>
+);
+};
+export default ToDoFunction;
+
+
+
+
+ToDoFunction.css
+
+.todo-container {
+max-width: 600px;
+margin: 0 auto;
+padding: 20px;
+}
+
+.todo-heading {
+text-align: center;
+font-size: 24px;
+font-weight: bold;
+
+margin-bottom: 20px;
+}
+
+.input-row {
+display: flex;
+gap: 10px;
+margin-bottom: 20px;
+}
+
+.input-row input {
+flex: 1;
+padding: 10px;
+font-size: 16px;
+}
+
+.input-row button {
+padding: 10px 20px;
+font-size: 16px;
+cursor: pointer;
+}
+
+.task-list {
+list-style: none;
+padding: 0;
+}
+
+.task-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: #fff;
+border: 1px solid #ddd;
+border-radius: 8px;
+padding: 12px;
+margin-bottom: 10px;
+}
+
+.task-item.completed {
+background-color: #d4edda; /* light green */
+}
+
+.task-item.completed .task-text {
+
+text-decoration: line-through;
+color: #6c757d;
+}
+
+.task-left {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.task-text {
+font-size: 18px;
+}
+
+.delete-button {
+background-color: #ff4d4f;
+color: white;
+border: none;
+padding: 8px 12px;
+border-radius: 5px;
+cursor: pointer;
+
+}
+
+.delete-button:hover {
+background-color: #e60000;
+}

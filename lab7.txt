@@ -1,0 +1,112 @@
+import React, { useState } from "react";
+import "./profile.css";
+import profilePic from './assets/IMG_3613.JPG'
+
+function App() {
+const [bgColor, setBgColor] = useState("#f9f9f9");
+
+const handleColorChange = () => {
+const colors = ["#f9f9f9", "#e3f2fd", "#fff3e0", "#e8f5e9"];
+const nextColor = colors[Math.floor(Math.random() * colors.length)];
+setBgColor(nextColor);
+};
+
+return (
+<div className="app-container">
+<button onClick={handleColorChange} className="color-button">
+Change Card Background
+
+</button>
+<ProfileCard
+name="Profilename"
+bio="Full Stack Developer | Tech Enthusiast | Open Source Contributor"
+image="https://i.pravatar.cc/150?img=47"
+bgColor={bgColor}
+/>
+</div>
+);
+}
+
+function ProfileCard({ name, bio, image, bgColor }) {
+return (
+<div className="profile-card" style={{ backgroundColor: bgColor }}>
+<img src={profilePic} alt={`${name}'s avatar`} className="profile-image" />
+<h2 className="profile-name">{name}</h2>
+<p className="profile-bio">{bio}</p>
+</div>
+);
+}
+
+export default App;
+
+
+
+
+
+profile.css
+
+.app-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+
+padding: 2rem;
+font-family: Arial, sans-serif;
+}
+
+.color-button {
+padding: 0.6rem 1.2rem;
+font-size: 1rem;
+background-color: #1976d2;
+color: white;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+margin-bottom: 1.5rem;
+transition: background-color 0.3s ease;
+}
+
+.color-button:hover {
+background-color: #1565c0;
+}
+
+.profile-card {
+width: 300px;
+padding: 1.5rem;
+border-radius: 16px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+text-align: center;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.profile-image {
+width: 100px;
+height: 100px;
+border-radius: 50%;
+object-fit: cover;
+margin-bottom: 1rem;
+border: 3px solid white;
+}
+
+.profile-name {
+font-size: 1.5rem;
+font-weight: bold;
+margin: 0.5rem 0;
+}
+
+.profile-bio {
+font-size: 1rem;
+color: #555;
+}
+
+@media (max-width: 400px) {
+.profile-card {
+width: 90%;
+}
+
+}

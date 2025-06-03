@@ -1,0 +1,199 @@
+import React, { useState } from 'react';
+import './remainder.css';
+
+const ReminderApp = () => {
+  const [name, setName] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState('all');
+
+  const addTask = () => {
+    if (name.trim() && dueDate.trim()) {
+      const newTask = { 
+        id: Date.now(),
+        name,
+        dueDate,
+        description,
+        completed: false,
+      };
+      setTasks(prev => [...prev, newTask]);
+      setName('');
+      setDueDate('');
+      setDescription('');
+    }
+  };
+
+  const toggleCompletion = (id) => {
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'completed') return task.completed;
+    if (filter === 'incomplete') return !task.completed;
+    return true;
+  });
+
+  return (
+    <div className="todo-container">
+      <h2 className="todo-heading">Reminder Application</h2>
+      <div className="input-row">
+        <div>
+        <input
+          type="text"
+          placeholder="Task Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        </div>
+        <div>
+        <input
+          type="date"
+          placeholder="Due Date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+        </div>
+        <div>
+        <input
+          type="text"
+          placeholder="Optional Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        </div>
+        <button onClick={addTask}>Add Task</button>
+      </div>
+
+      <div className="filters">
+        <button onClick={() => setFilter('all')}>All</button>
+        <button onClick={() => setFilter('completed')}>Completed</button>
+        <button onClick={() => setFilter('incomplete')}>Incomplete</button>
+      </div>
+
+      <ul className="task-list">
+        {filteredTasks.map(({ id, name, dueDate, description, completed }) => (
+          <li key={id} className={`task-item ${completed ? 'completed' : ''}`}>
+            <div className="task-left">
+              <span className="task-text">
+                <strong>{name}</strong><br />
+                Due: {dueDate}<br />
+                {description && <em>{description}</em>}
+              </span>
+            </div>
+            <button onClick={() => toggleCompletion(id)}>
+              {completed ? 'Mark Incomplete' : 'Mark Completed'}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+export default ReminderApp;
+
+
+
+Remainder.css
+.app {
+max-width: 600px;
+margin: 0 auto;
+padding: 2rem;
+font-family: sans-serif;
+background-color: #f9f9f9;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+}
+
+h1 {
+text-align: center;
+margin-bottom: 1rem;
+}
+
+.task-form {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+}
+
+.task-form input,
+.task-form textarea {
+padding: 0.5rem;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+.task-form button {
+padding: 0.5rem;
+background-color: #007bff;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.task-form button:hover {
+background-color: #0056b3;
+}
+
+.filters {
+display: flex;
+justify-content: center;
+gap: 1rem;
+margin: 1rem 0;
+}
+
+.filters button {
+padding: 0.4rem 1rem;
+border: none;
+border-radius: 5px;
+background-color: #6c757d;
+color: white;
+cursor: pointer;
+}
+
+.filters button:hover {
+background-color: #5a6268;
+}
+
+.task-list {
+list-style-type: none;
+padding: 0;
+}
+
+.task {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+margin: 0.5rem 0;
+background-color: white;
+border-left: 5px solid #007bff;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.task.completed {
+text-decoration: line-through;
+opacity: 0.6;
+border-left-color: green;
+}
+
+.task button {
+padding: 0.3rem 0.8rem;
+background-color: #28a745;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.task button:hover {
+background-color: #218838;
+
+}

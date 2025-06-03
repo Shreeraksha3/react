@@ -1,0 +1,149 @@
+App.js
+// FigureList.js
+import React, { useState } from 'react';
+import BasicFigure from './BasicFigure';
+import './FigureStyles.css';
+
+const FigureList = () => {
+  const [imageURL, setImageURL] = useState('');
+  const [caption, setCaption] = useState('');
+  const [figures, setFigures] = useState([]);
+
+  const addFigure = () => {
+    if (imageURL.trim() && caption.trim()) {
+      const newFigure = {
+        id: Date.now(),
+        imageURL,
+        caption,
+      };
+      setFigures(prev => [...prev, newFigure]);
+      setImageURL('');
+      setCaption('');
+    }
+  };
+
+  const deleteFigure = (id) => {
+    setFigures(prev => prev.filter(figure => figure.id !== id));
+  };
+
+  return (
+    <div className="gallery-container">
+      <h2>Figure Gallery</h2>
+      <div className="input-row">
+        <input
+          type="text"
+          placeholder="Enter Image URL"
+          value={imageURL}
+          onChange={(e) => setImageURL(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Enter Image Caption"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+        />
+        <button onClick={addFigure}>Add Figure</button>
+      </div>
+
+      <div className="figure-grid">
+        {figures.map(({ id, imageURL, caption }) => (
+          <BasicFigure
+            key={id}
+            imageURL={imageURL}
+            caption={caption}
+            onDelete={() => deleteFigure(id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default FigureList;
+
+
+
+BasicFigure.js
+
+// BasicFigure.js
+import React from 'react';
+import './FigureStyles.css';
+
+const BasicFigure = ({ imageURL, caption, onDelete }) => {
+  return (
+    <div className="figure-card">
+      <img src={imageURL} alt={caption} className="figure-image" />
+      <p className="figure-caption">{caption}</p>
+      <button onClick={onDelete} className="delete-button">Delete</button>
+    </div>
+  );
+};
+
+export default BasicFigure;
+
+FigureStyles.css
+.gallery-container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.input-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.input-row input {
+  padding: 0.5rem;
+  width: 200px;
+}
+
+.input-row button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.figure-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.figure-card:hover {
+  transform: scale(1.05);
+}
+
+.figure-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.figure-caption {
+  padding: 0.5rem;
+  font-weight: bold;
+}
+
+.delete-button {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 0.4rem 0.6rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-button:hover {
+  background: #c0392b;
+}
